@@ -5,9 +5,10 @@ import { Controller, Get } from '@nestjs/common';
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Get()
-  async getAll(): Promise<string> {
-    const s = await this.userService.findAll();
-    console.log(s);
+  getAll(): string {
+    this.userService.findAll().subscribe((e) => {
+      console.log(e);
+    });
     return 'SIUU';
   }
 }

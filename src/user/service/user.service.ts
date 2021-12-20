@@ -7,7 +7,16 @@ import { Model } from 'mongoose';
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
-  async findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+  findAll(): Observable<User[]> {
+    return new Observable((obs) => {
+      this.userModel
+        .find()
+        .exec()
+        .then((e) => {
+          obs.next(e);
+        })
+        .catch((error) => obs.error(error))
+        .finally(() => obs.complete());
+    });
   }
 }
