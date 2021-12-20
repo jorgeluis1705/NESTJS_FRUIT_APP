@@ -19,4 +19,14 @@ export class UserService {
         .finally(() => obs.complete());
     });
   }
+  getOneUser(id: string): Observable<User> {
+    return new Observable<User>((obs) => {
+      this.userModel
+        .findById(id)
+        .exec()
+        .then((res) => obs.next(res))
+        .catch((err) => obs.error(err))
+        .finally(() => obs.complete());
+    });
+  }
 }
