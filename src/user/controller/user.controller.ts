@@ -1,7 +1,7 @@
 import { User } from './../models/user.model';
 import { Observable } from 'rxjs';
 import { UserService } from './../service/user.service';
-import { Controller, Get, Param, Request } from '@nestjs/common';
+import { Controller, Get, Param, Post, Req, Request } from '@nestjs/common';
 
 @Controller('user')
 export class UserController {
@@ -25,5 +25,10 @@ export class UserController {
         complete: () => obs.complete(),
       });
     });
+  }
+  @Post('/')
+  postUser(@Req() req: Request) {
+    console.log(req.body);
+    return req.body;
   }
 }
