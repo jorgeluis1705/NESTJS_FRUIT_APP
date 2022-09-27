@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 export type UserDocument = User & Document;
-
 @Schema()
 export class User {
   @Prop({ required: [true, 'name es riquired'], type: 'String' })
@@ -20,10 +19,6 @@ export class User {
     enum: ['ADMIN_ROLE', 'USER_ROLE'],
   })
   role: string;
-  @Prop({ type: Boolean, default: true })
-  state: boolean;
-  @Prop({ type: Boolean, default: false })
-  google: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
