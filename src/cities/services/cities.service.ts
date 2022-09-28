@@ -1,3 +1,8 @@
+import { SubTaskEntity, SubTaskDocument } from './../../shops/sub-task.model';
+import {
+  TodoItemEntityDcoument,
+  TodoItemEntity,
+} from './../../shops/todo.model';
 import { from, Observable, of } from 'rxjs';
 import { Citie, CityDocument } from './../model/city.model';
 import { Injectable } from '@nestjs/common';
@@ -8,6 +13,9 @@ import { InjectModel } from '@nestjs/mongoose';
 export class CitiesService {
   constructor(
     @InjectModel(Citie.name) private citiModel: Model<CityDocument>,
+    @InjectModel(TodoItemEntity.name)
+    private todoModel: Model<TodoItemEntityDcoument>,
+    @InjectModel(SubTaskEntity.name) private subModel: Model<SubTaskDocument>,
   ) {}
 
   createCity(City: Citie): Observable<Citie> {
@@ -15,5 +23,19 @@ export class CitiesService {
   }
   getAllCities(): Observable<Citie[]> {
     return from(this.citiModel.find().exec());
+  }
+  getAllTodo(): Observable<TodoItemEntity[]> {
+    return from(this.todoModel.find().populate('subs').exec());
+  }
+  getAllSub(): Observable<SubTaskEntity[]> {
+    return from(this.subModel.find().populate('todoItem').exec());
+  }
+  createTodoItem(
+    todoItem: TodoItemEntityDcoument,
+  ): Observable<TodoItemEntityDcoument> {
+    return from(this.todoModel.create(todoItem));
+  }
+  createSubTask(SubTask: SubTaskDocument): Observable<SubTaskDocument> {
+    return from(this.subModel.create(SubTask));
   }
 }
