@@ -13,6 +13,10 @@ export class Citie {
     type: String,
   })
   name: string;
+  @Prop({
+    type: String,
+  })
+  image: string;
   @Prop([
     {
       type: SchemaTypes.ObjectId,
