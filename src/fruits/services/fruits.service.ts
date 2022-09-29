@@ -15,7 +15,7 @@ export class FruitsService {
     return from(this.FruitsModule.create(fruit));
   }
   getById(id: string | number): Observable<Fruit> {
-    return from(this.FruitsModule.findById(id).populate('fruits').exec());
+    return from(this.FruitsModule.findById(id).populate('city').exec());
   }
   getAllFruits(): Observable<Fruit[]> {
     return from(this.FruitsModule.find().populate('city').exec());
