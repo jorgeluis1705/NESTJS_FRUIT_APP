@@ -6,7 +6,9 @@ import { Document } from 'mongoose';
 
 export type FruitDocument = Fruit & Document;
 
-@Schema()
+@Schema({
+  versionKey: false,
+})
 export class Fruit extends Document {
   @Prop({
     type: String,

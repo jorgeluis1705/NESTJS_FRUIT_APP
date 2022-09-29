@@ -5,7 +5,9 @@ import { SchemaTypes, Types } from 'mongoose';
 import { Document } from 'mongoose';
 export type CityDocument = Citie & Document;
 
-@Schema()
+@Schema({
+  versionKey: false,
+})
 export class Citie {
   @Prop({
     type: String,
