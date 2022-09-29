@@ -1,3 +1,4 @@
+import { Fruit, FruitSchema } from './../fruits/model/fruit.model';
 import { TodoItemEntity, TodoItemEntitySchema } from './../shops/todo.model';
 import {
   SubTaskDocument,
@@ -16,6 +17,7 @@ import { CitiesService } from './services/cities.service';
       { name: Citie.name, schema: CitieSchema },
       { name: SubTaskEntity.name, schema: SubTaskEntitySchema },
       { name: TodoItemEntity.name, schema: TodoItemEntitySchema },
+      { name: Fruit.name, schema: FruitSchema },
     ]),
   ],
   controllers: [CitiesController],

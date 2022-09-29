@@ -12,30 +12,46 @@ import { InjectModel } from '@nestjs/mongoose';
 @Injectable()
 export class CitiesService {
   constructor(
-    @InjectModel(Citie.name) private citiModel: Model<CityDocument>,
+    @InjectModel(Citie.name) private cityModel: Model<CityDocument>,
     @InjectModel(TodoItemEntity.name)
     private todoModel: Model<TodoItemEntityDcoument>,
     @InjectModel(SubTaskEntity.name) private subModel: Model<SubTaskDocument>,
   ) {}
 
   createCity(City: Citie): Observable<Citie> {
-    return from(this.citiModel.create(City));
+    return from(this.cityModel.create(City));
   }
   getAllCities(): Observable<Citie[]> {
-    return from(this.citiModel.find().exec());
+    return from(this.cityModel.find().populate('fruits').exec());
   }
-  getAllTodo(): Observable<TodoItemEntity[]> {
-    return from(this.todoModel.find().populate('subs').exec());
+
+  async deleteCity(id: string): Promise<any> {
+    return from(this.cityModel.deleteOne({ _id: id }));
   }
-  getAllSub(): Observable<SubTaskEntity[]> {
-    return from(this.subModel.find().populate('todoItem').exec());
+
+  updateCity(citi: Citie, id: string | number): Observable<Citie> {
+    return from(
+      this.cityModel
+        .findByIdAndUpdate({ _id: id }, citi)
+        .populate('fruits')
+        .exec(),
+    );
   }
-  createTodoItem(
-    todoItem: TodoItemEntityDcoument,
-  ): Observable<TodoItemEntityDcoument> {
-    return from(this.todoModel.create(todoItem));
+  getById(id: string | number): Observable<Citie> {
+    return from(this.cityModel.findById(id).populate('fruits').exec());
   }
-  createSubTask(SubTask: SubTaskDocument): Observable<SubTaskDocument> {
-    return from(this.subModel.create(SubTask));
-  }
+  // getAllTodo(): Observable<TodoItemEntity[]> {
+  //   return from(this.todoModel.find().populate('subs').exec());
+  // }
+  // getAllSub(): Observable<SubTaskEntity[]> {
+  //   return from(this.subModel.find().populate('todoItem').exec());
+  // }
+  // createTodoItem(
+  //   todoItem: TodoItemEntityDcoument,
+  // ): Observable<TodoItemEntityDcoument> {
+  //   return from(this.todoModel.create(todoItem));
+  // }
+  // createSubTask(SubTask: SubTaskDocument): Observable<SubTaskDocument> {
+  //   return from(this.subModel.create(SubTask));
+  // }
 }
