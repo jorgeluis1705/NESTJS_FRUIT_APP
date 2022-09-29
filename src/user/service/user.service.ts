@@ -1,4 +1,4 @@
-import { isObservable, Observable } from 'rxjs';
+import { from, isObservable, Observable } from 'rxjs';
 import { User, UserDocument } from './../models/user.model';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -8,25 +8,25 @@ import { Model } from 'mongoose';
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
   findAll(): Observable<User[]> {
-    return new Observable((obs) => {
-      this.userModel
-        .find()
-        .exec()
-        .then((e) => {
-          obs.next(e);
-        })
-        .catch((error) => obs.error(error))
-        .finally(() => obs.complete());
-    });
+    return from(this.userModel.find().exec());
   }
   getOneUser(id: string): Observable<User> {
-    return new Observable<User>((obs) => {
+    return from(this.userModel.findById(id).exec());
+  }
+  crateUSer(user: User): Observable<User> {
+    return from(this.userModel.create(user));
+  }
+
+  async deleteUser(id: string): Promise<any> {
+    return from(this.userModel.deleteOne({ _id: id }));
+  }
+
+  updateUSer(citi: User, id: string | number): Observable<User> {
+    return from(
       this.userModel
-        .findById(id)
-        .exec()
-        .then((res) => obs.next(res))
-        .catch((err) => obs.error(err))
-        .finally(() => obs.complete());
-    });
+        .findByIdAndUpdate({ _id: id }, citi)
+        .populate('fruits')
+        .exec(),
+    );
   }
 }

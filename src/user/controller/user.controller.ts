@@ -1,34 +1,46 @@
 import { User } from './../models/user.model';
 import { Observable } from 'rxjs';
 import { UserService } from './../service/user.service';
-import { Controller, Get, Param, Post, Req, Request } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-  @Get()
+  @Get('')
   getAll(): Observable<User[]> {
-    return new Observable<User[]>((obs) => {
-      this.userService.findAll().subscribe({
-        next: (e) => obs.next(e),
-        error: (err) => obs.next(err),
-        complete: () => obs.complete(),
-      });
-    });
+    return this.userService.findAll();
   }
-  @Get('/:id')
+  @Get(':id')
   getOne(@Param() params): Observable<User> {
-    return new Observable<User>((obs) => {
-      this.userService.getOneUser(params['id']).subscribe({
-        next: (e) => obs.next(e),
-        error: (err) => obs.next(err),
-        complete: () => obs.complete(),
-      });
-    });
+    return this.userService.getOneUser(params['id']);
   }
   @Post('/')
-  postUser(@Req() req: Request) {
-    console.log(req.body);
-    return req.body;
+  postUser(@Body() city: User): Observable<User> {
+    return this.userService.crateUSer(city);
+    // return of(JSON.stringify(city));
+  }
+  @Delete(':id')
+  @HttpCode(200)
+  async delete(@Param('id') id: string): Promise<string> {
+    await this.userService.deleteUser(id);
+    return id;
+  }
+
+  @Put(':id')
+  @HttpCode(200)
+  updateUser(
+    @Param('id') id: string | number,
+    @Body() user: User,
+  ): Observable<User> {
+    return this.userService.updateUSer(user, id);
   }
 }
