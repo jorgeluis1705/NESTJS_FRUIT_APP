@@ -14,8 +14,20 @@ export class FruitsService {
   createFruit(fruit: Fruit): Observable<Fruit> {
     return from(this.FruitsModule.create(fruit));
   }
-
+  getById(id: string | number): Observable<Fruit> {
+    return from(this.FruitsModule.findById(id).populate('fruits').exec());
+  }
   getAllFruits(): Observable<Fruit[]> {
     return from(this.FruitsModule.find().populate('city').exec());
+  }
+  updateFruit(citi: Fruit, id: string | number): Observable<Fruit> {
+    return from(
+      this.FruitsModule.findByIdAndUpdate({ _id: id }, citi)
+        .populate('fruits')
+        .exec(),
+    );
+  }
+  async deleteFruit(id: string): Promise<any> {
+    return from(this.FruitsModule.deleteOne({ _id: id }));
   }
 }
